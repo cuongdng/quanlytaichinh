@@ -1,0 +1,14 @@
+.insight-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  app-calendar {
+    flex-grow: 1;
+  }
+}
+
+.chart-container {
+  display: flex;
+  flex-direction: column;
+  width: 350px;
+}

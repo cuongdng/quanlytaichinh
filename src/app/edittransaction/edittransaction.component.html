@@ -1,0 +1,113 @@
+<div class="container">
+  <div class="input-container">
+    <div class="input">
+      <span class="p-float-label">
+        <input type="text" id="inputtext" pInputText [(ngModel)]="title" />
+        <label for="inputtext">Ghi chú</label>
+      </span>
+    </div>
+    <div class="input">
+      <span class="p-float-label">
+        <p-calendar
+          [(ngModel)]="date"
+          dateFormat="dd/mm/yy"
+          [showButtonBar]="true"
+        ></p-calendar>
+        <label for="inputtext">Ngày tháng</label>
+      </span>
+    </div>
+    <div class="input">
+      <span class="p-float-label">
+        <p-inputNumber
+          [(ngModel)]="amount"
+          mode="currency"
+          currency="VND"
+          locale="vi-VN"
+          [min]="0"
+        ></p-inputNumber>
+        <label for="inputAmount">Số tiền</label>
+      </span>
+    </div>
+    <div class="input">
+      <p-radioButton
+        name="type"
+        value="income"
+        [(ngModel)]="type"
+        label="Khoản thu"
+      ></p-radioButton>
+      <p-radioButton
+        name="type"
+        value="outcome"
+        [(ngModel)]="type"
+        label="Khoản chi"
+        [style]="{ 'margin-left': '8px' }"
+      ></p-radioButton>
+    </div>
+
+    <div *ngIf="type === 'outcome'; else incomeTemplate" class="input">
+      <label for="category">Loại chi tiêu</label>
+      <p-listbox
+        [options]="outcomeCategory"
+        [(ngModel)]="category"
+        optionLabel="label"
+        optionValue="value"
+        id="category"
+        [listStyle]="{ height: '210px' }"
+      ></p-listbox>
+    </div>
+    <ng-template #incomeTemplate>
+      <div class="input">
+        <label for="category">Loại chi tiêu</label>
+        <p-listbox
+          [options]="incomeCategory"
+          [(ngModel)]="category"
+          optionLabel="label"
+          optionValue="value"
+          id="category"
+          [listStyle]="{ height: '210px' }"
+        ></p-listbox>
+      </div>
+    </ng-template>
+    <div class="input">
+      <p-button label="Thêm" (onClick)="addTransaction()"></p-button>
+    </div>
+  </div>
+
+  <div class="summary-container">
+    <h2>Số tiền hiện có: {{ money.total | currency: "VND" }}</h2>
+
+    <div class="transaction-list">
+      <h3>Lịch sử chi tiêu</h3>
+      <p-table
+        [value]="money.transactions"
+        responsiveLayout="scroll"
+        [scrollable]="true"
+        scrollHeight="400px"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="date">
+              Thời gian <p-sortIcon field="date"></p-sortIcon>
+            </th>
+            <th pSortableColumn="amount">
+              Số tiền <p-sortIcon field="amount"></p-sortIcon>
+            </th>
+            <th>Ghi chú</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-transaction>
+          <tr
+            [ngClass]="{
+              outcome: transaction.type === 'outcome',
+              income: transaction.type === 'income'
+            }"
+          >
+            <td>{{ transaction.date | date: "dd/MM/YYYY" }}</td>
+            <td>{{ transaction.amount | currency: "VND" }}</td>
+            <td>{{ transaction.title }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
