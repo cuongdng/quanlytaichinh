@@ -9,8 +9,25 @@
   margin-top: 20px;
 }
 
+@media (max-width: 721px) {
+  .container {
+    flex-direction: column;
+  }
+}
+
 .summary-container {
   flex-grow: 1;
+  .summary-header {
+    padding-right: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    button {
+      height: 50px;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  }
 }
 
 .input {
@@ -31,4 +48,12 @@
 
 .outcome {
   background-color: #e98a99 !important;
+}
+
+h2.negative span {
+  color: red;
+}
+
+h2.positive span {
+  color: green;
 }

@@ -15,6 +15,10 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { TableModule } from 'primeng/table';
 import { ChartModule } from 'primeng/chart';
 import { DividerModule } from 'primeng/divider';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
+import { FilterService } from 'primeng/api';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -53,8 +57,10 @@ FullCalendarModule.registerPlugins([
     TableModule,
     ChartModule,
     DividerModule,
+    ToastModule,
+    ConfirmDialogModule,
   ],
-  providers: [],
+  providers: [ConfirmationService, FilterService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

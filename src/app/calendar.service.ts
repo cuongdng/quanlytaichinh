@@ -16,8 +16,6 @@ export class CalendarService {
       }
     ); //The list of day user has use or receive money.
 
-    console.log(consumptionDay);
-
     let calendarEvents = _.map(consumptionDay, (e) => {
       let dateString = e.toString();
       let incomeMoney = _.reduce(

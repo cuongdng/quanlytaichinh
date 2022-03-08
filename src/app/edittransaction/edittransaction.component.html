@@ -1,88 +1,115 @@
 <div class="container">
   <div class="input-container">
-    <div class="input">
-      <span class="p-float-label">
-        <input type="text" id="inputtext" pInputText [(ngModel)]="title" />
-        <label for="inputtext">Ghi chú</label>
-      </span>
-    </div>
-    <div class="input">
-      <span class="p-float-label">
-        <p-calendar
-          [(ngModel)]="date"
-          dateFormat="dd/mm/yy"
-          [showButtonBar]="true"
-        ></p-calendar>
-        <label for="inputtext">Ngày tháng</label>
-      </span>
-    </div>
-    <div class="input">
-      <span class="p-float-label">
-        <p-inputNumber
-          [(ngModel)]="amount"
-          mode="currency"
-          currency="VND"
-          locale="vi-VN"
-          [min]="0"
-          [required]="true"
-        ></p-inputNumber>
-        <label for="inputAmount">Số tiền</label>
-      </span>
-    </div>
-    <div class="input">
-      <p-radioButton
-        name="type"
-        value="income"
-        [(ngModel)]="type"
-        label="Khoản thu"
-      ></p-radioButton>
-      <p-radioButton
-        name="type"
-        value="outcome"
-        [(ngModel)]="type"
-        label="Khoản chi"
-        [style]="{ 'margin-left': '8px' }"
-      ></p-radioButton>
-    </div>
-
-    <div *ngIf="type === 'outcome'; else incomeTemplate" class="input">
-      <label for="category">Loại chi tiêu</label>
-      <p-listbox
-        [options]="outcomeCategory"
-        [(ngModel)]="category"
-        optionLabel="label"
-        optionValue="value"
-        id="category"
-        [listStyle]="{ height: '210px' }"
-        [required]="true"
-      ></p-listbox>
-    </div>
-    <ng-template #incomeTemplate>
+    <form #addTransactionForm>
       <div class="input">
+        <span class="p-float-label">
+          <input
+            type="text"
+            id="inputtext"
+            pInputText
+            [(ngModel)]="title"
+            name="title"
+          />
+          <label for="inputtext">Ghi chú</label>
+        </span>
+      </div>
+      <div class="input">
+        <span class="p-float-label">
+          <p-calendar
+            [(ngModel)]="date"
+            dateFormat="dd/mm/yy"
+            [showButtonBar]="true"
+            name="date"
+          ></p-calendar>
+          <label for="inputtext">Ngày tháng</label>
+        </span>
+      </div>
+      <div class="input">
+        <span class="p-float-label">
+          <p-inputNumber
+            [(ngModel)]="amount"
+            mode="currency"
+            currency="VND"
+            locale="vi-VN"
+            [min]="0"
+            [required]="true"
+            name="amount"
+          ></p-inputNumber>
+          <label for="inputAmount">Số tiền</label>
+        </span>
+      </div>
+      <div class="input">
+        <p-radioButton
+          name="type"
+          value="income"
+          [(ngModel)]="type"
+          label="Khoản thu"
+          name="type"
+        ></p-radioButton>
+        <p-radioButton
+          name="type"
+          value="outcome"
+          [(ngModel)]="type"
+          label="Khoản chi"
+          [style]="{ 'margin-left': '8px' }"
+          name="type"
+        ></p-radioButton>
+      </div>
+
+      <div *ngIf="type === 'outcome'; else incomeTemplate" class="input">
         <label for="category">Loại chi tiêu</label>
         <p-listbox
-          [options]="incomeCategory"
-          [(ngModel)]="category"
+          [options]="outcomeCategory"
+          [(ngModel)]="categoryOutcome"
           optionLabel="label"
           optionValue="value"
           id="category"
           [listStyle]="{ height: '210px' }"
-          [required]="true"
+          name="category"
         ></p-listbox>
       </div>
-    </ng-template>
-    <div class="input">
-      <p-button
-        label="Thêm"
-        (onClick)="addTransaction()"
-        [disabled]="!amount"
-      ></p-button>
-    </div>
+      <ng-template #incomeTemplate>
+        <div class="input">
+          <label for="category">Loại chi tiêu</label>
+          <p-listbox
+            [options]="incomeCategory"
+            [(ngModel)]="categoryIncome"
+            optionLabel="label"
+            optionValue="value"
+            id="category"
+            [listStyle]="{ height: '210px' }"
+            name="category"
+          ></p-listbox>
+        </div>
+      </ng-template>
+      <div class="input">
+        <p-button
+          label="Thêm"
+          (onClick)="addTransaction(); addTransactionForm.reset()"
+          [disabled]="!amount"
+        ></p-button>
+      </div>
+    </form>
   </div>
 
   <div class="summary-container">
-    <h2>Số tiền hiện có: {{ money.total | currency: "VND" }}</h2>
-
+    <div class="summary-header">
+      <h2 [ngClass]="{ negative: money.total <= 0, positive: money.total > 0 }">
+        Số tiền hiện có: <span>{{ money.total | currency: "VND" }}</span>
+      </h2>
+      <p-confirmDialog
+        header="Confirmation"
+        icon="pi pi-exclamation-triangle"
+      ></p-confirmDialog>
+      <button
+        (click)="clearAllTransactions()"
+        pButton
+        type="button"
+        label="Xoá dữ liệu"
+        icon="pi pi-trash"
+        [style]="{ backgroundColor: '#64748b', borderColor: '#64748b' }"
+      ></button>
+    </div>
     <div class="transaction-list">
       <h3>Lịch sử chi tiêu</h3>
       <p-table
@@ -118,3 +145,4 @@
     </div>
   </div>
 </div>
+<p-toast position="top-right"></p-toast>

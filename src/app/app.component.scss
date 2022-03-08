@@ -1,7 +1,8 @@
 .container {
   h1 {
     text-transform: uppercase;
+    cursor: pointer;
   }
-  width: 1200px;
+  max-width: 1200px;
   margin: auto;
 }

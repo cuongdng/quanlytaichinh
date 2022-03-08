@@ -25,6 +25,10 @@ export class MoneyService {
     this.saveToLocal();
   }
 
+  clearLocal() {
+    localStorage.removeItem('money');
+  }
+
   saveToLocal(): void {
     let myData = JSON.stringify(this.money);
     localStorage.setItem('money', myData);
